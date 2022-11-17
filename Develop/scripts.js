@@ -1,21 +1,33 @@
-const apiKey = "06e20dcd9d8864feaf509bbb85437340";
-
 const searchBtn = document.querySelector("#searchBtn");
-
 const userInput = document.querySelector(".inputField");
+const searchTextEl = document.querySelector(".searchText");
 
+const apiKey = "06e20dcd9d8864feaf509bbb85437340";
 let cities = [];
 
+//event fun for submit
 searchBtn.addEventListener("click", function (e) {
   e.preventDefault();
 
-  const userValue = userInput.value;
-  cities.push(userValue);
+  const inputValue = userInput.value;
+  cities.push(inputValue);
 
-  localStorage.setItem("userinput", JSON.stringify(cities));
-  fetchCityCoordinates(userValue);
+  localStorage.setItem("userInputs", JSON.stringify(cities));
+
+  fetchCityCoordinates(inputValue);
   //   console.log(userValue);
 });
+
+//Display user input values
+const inputValues = JSON.parse(localStorage.getItem("userInputs")) || [];
+
+console.log(inputValues);
+
+searchTextEl.innerHTML = inputValues
+  .map((item) => {
+    return `<li> ${item} <li>`;
+  })
+  .join("");
 
 function fetchCityCoordinates(city) {
   const apiURL = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=${1}&appid=${apiKey}`;
@@ -40,6 +52,6 @@ function fetchCurrentWeather(lat, lon) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data);
+      console.log(data.main);
     });
 }
