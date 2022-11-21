@@ -6,6 +6,7 @@ const cityNameEl = document.querySelector("#city-name");
 const tempEl = document.querySelector("#temp");
 const windEl = document.querySelector("#wind");
 const humidityEl = document.querySelector("#humidity");
+const clearBtnEl = document.querySelector("#clearBtn");
 
 //Get userInputs from local storage
 const searchedCities = JSON.parse(localStorage.getItem("cities")) || [];
@@ -95,6 +96,11 @@ function handleSearchedcityClick(e) {
 
 searchedCitiesEl.addEventListener("click", handleSearchedcityClick);
 
+clearBtnEl.addEventListener("click", function (e) {
+  e.preventDefault();
+  localStorage.clear();
+});
+
 function displayWeatherInfo(data) {
   console.log(data);
 
@@ -109,3 +115,6 @@ function displayWeatherInfo(data) {
   windEl.textContent = `Wind: ${data.wind.deg} degrees`;
   humidityEl.textContent = `Humidity: ${data.main.humidity}`;
 }
+
+//Randonly generated cards
+function renderRandomCards() {}
