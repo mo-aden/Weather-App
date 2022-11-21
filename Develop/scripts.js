@@ -30,7 +30,7 @@ function fetchCurrentWeather(lat, lon) {
 //Using the user input get the weather data from the api
 
 function fetchCityCoordinates(city) {
-  const apiURL = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=${1}&appid=${apiKey}`;
+  const apiURL = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=${1}&appid=${apiKey}`;
 
   fetch(apiURL)
     .then(function (response) {
@@ -40,6 +40,33 @@ function fetchCityCoordinates(city) {
       //   console.log(data[0].lat);
       //   console.log(data[0].lon);
       fetchCurrentWeather(data[0].lat, data[0].lon);
+      fetchForcast(data[0].lat, data[0].lon);
+
+      searchedCities.push(city); //pushes to the arr
+
+      //store userinput in the local storage
+      localStorage.setItem("cities", JSON.stringify(searchedCities));
+      // localStorage.setItem("userInputs", JSON.stringify(cities));
+      DisplaySearchedCities();
+    })
+    .catch((err) => {
+      console.log(`Enter correct city ...`);
+    });
+}
+
+//fetch the five days forcat
+function fetchForcast(lat, lon) {
+  const apiURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
+
+  fetch(apiURL)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      //Display data onto the page
+      // console.log(data);
+      console.log(data);
+      // displayWeatherInfo(data);
     });
 }
 
@@ -48,11 +75,12 @@ function handleFormSubmit(e) {
   e.preventDefault();
 
   const userInput = userInputEl.value;
-  searchedCities.push(userInput); //pushes to the arr
+  // searchedCities.push(userInput); //pushes to the arr
 
-  //store userinput in the local storage
-  localStorage.setItem("cities", JSON.stringify(searchedCities));
-  // localStorage.setItem("userInputs", JSON.stringify(cities));
+  // //store userinput in the local storage
+  // localStorage.setItem("cities", JSON.stringify(searchedCities));
+  // // localStorage.setItem("userInputs", JSON.stringify(cities));
+  // DisplaySearchedCities();
 
   fetchCityCoordinates(userInput);
 
@@ -67,6 +95,8 @@ function DisplaySearchedCities() {
   const recentCities = searchedCities.slice(-5, searchedCities.length);
   // console.log(recentCities);
 
+  //Clear
+  searchedCitiesEl.textContent = "";
   //Looping backwords to show the user recent searches
   for (let i = recentCities.length - 1; i >= 0; i--) {
     const city = recentCities[i];
@@ -96,9 +126,14 @@ function handleSearchedcityClick(e) {
 
 searchedCitiesEl.addEventListener("click", handleSearchedcityClick);
 
+//Clear search cities
 clearBtnEl.addEventListener("click", function (e) {
   e.preventDefault();
+
   localStorage.clear();
+
+  //Clear
+  searchedCitiesEl.textContent = "";
 });
 
 function displayWeatherInfo(data) {
