@@ -3,6 +3,9 @@ const userInputEl = document.querySelector(".inputField");
 const searchTextEl = document.querySelector(".searchText");
 const searchedCitiesEl = document.querySelector(".searchedCities");
 const cityNameEl = document.querySelector("#city-name");
+const tempEl = document.querySelector("#temp");
+const windEl = document.querySelector("#wind");
+const humidityEl = document.querySelector("#humidity");
 
 //Get userInputs from local storage
 const searchedCities = JSON.parse(localStorage.getItem("cities")) || [];
@@ -95,5 +98,14 @@ searchedCitiesEl.addEventListener("click", handleSearchedcityClick);
 function displayWeatherInfo(data) {
   console.log(data);
 
-  cityNameEl.textContent = data.name;
+  const timeNow = new Date(data.dt * 1000).toLocaleString();
+
+  // console.log(timeNow);
+  // const now = new Date(data.dt * 1000);
+  // console.log(now.toLocaleString());
+  cityNameEl.textContent = `${data.name} - ${timeNow}`;
+
+  tempEl.textContent = `Temperature: ${data.main.temp}`;
+  windEl.textContent = `Wind: ${data.wind.deg} degrees`;
+  humidityEl.textContent = `Humidity: ${data.main.humidity}`;
 }
