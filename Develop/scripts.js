@@ -3,7 +3,11 @@ const userInputEl = document.querySelector(".inputField");
 const searchTextEl = document.querySelector(".searchText");
 const searchedCitiesEl = document.querySelector(".searchedCities");
 const cityNameEl = document.querySelector("#city-name");
+const dateEl = document.querySelector("#date");
+const iconEl = document.querySelector("#icon");
 const tempEl = document.querySelector("#temp");
+const supscriptEl = document.querySelector("#temp sup");
+const descriptionEL = document.querySelector("#description");
 const windEl = document.querySelector("#wind");
 const humidityEl = document.querySelector("#humidity");
 const clearBtnEl = document.querySelector("#clearBtn");
@@ -23,7 +27,7 @@ function fetchCurrentWeather(lat, lon) {
     .then(function (data) {
       //Display data onto the page
       // console.log(data);
-      displayWeatherInfo(data);
+      // displayWeatherInfo(data);
     });
 }
 
@@ -66,6 +70,8 @@ function fetchForcast(lat, lon) {
       //Display data onto the page
       // console.log(data);
       console.log(data);
+      // displayWeatherInfo(data);
+      displayToday(data);
       // displayWeatherInfo(data);
     });
 }
@@ -112,7 +118,7 @@ function DisplaySearchedCities() {
   }
 }
 
-DisplaySearchedCities();
+// DisplaySearchedCities();
 
 //Event for searched City Button click
 function handleSearchedcityClick(e) {
@@ -134,22 +140,65 @@ clearBtnEl.addEventListener("click", function (e) {
 
   //Clear
   searchedCitiesEl.textContent = "";
+
+  //Refresh the page
+  window.location.reload();
 });
 
-function displayWeatherInfo(data) {
-  console.log(data);
+// function displayWeatherInfo(data) {
+//   console.log(data);
 
-  const timeNow = new Date(data.dt * 1000).toLocaleString();
+//   const timeNow = new Date(data.dt * 1000).toLocaleString();
 
-  // console.log(timeNow);
-  // const now = new Date(data.dt * 1000);
-  // console.log(now.toLocaleString());
-  cityNameEl.textContent = `${data.name} - ${timeNow}`;
+//   // console.log(timeNow);
+//   // const now = new Date(data.dt * 1000);
+//   // console.log(now.toLocaleString());
+//   cityNameEl.textContent = `${data.name} - ${timeNow}`;
 
-  tempEl.textContent = `Temperature: ${data.main.temp}`;
-  windEl.textContent = `Wind: ${data.wind.deg} degrees`;
-  humidityEl.textContent = `Humidity: ${data.main.humidity}`;
-}
+//   tempEl.textContent = `Temperature: ${data.main.temp}`;
+//   windEl.textContent = `Wind: ${data.wind.deg} degrees`;
+//   humidityEl.textContent = `Humidity: ${data.main.humidity}`;
+// }
 
 //Randonly generated cards
-function renderRandomCards() {}
+function displayToday(data) {
+  const cityName = data.city.name;
+  console.log(cityName);
+  const country = data.city.country;
+  console.log(country);
+
+  let dt = new Date(data.list[0].dt_txt);
+  const today = dt.toLocaleDateString("en-us", { weekday: "long", year: "numeric", month: "numeric", day: "numeric" });
+  console.log(today);
+
+  // const icon = data.list.weather;
+
+  const iconUrl = `https://openweathermap.org/img/wn/${data.list[0].weather[0]["icon"]}.png`;
+
+  const cloudInfo = data.list[0].weather[0]["description"];
+
+  // https://openweathermap.org/img/wn/${data.list[0].weather[0]["description"]};
+
+  console.log(cloudInfo);
+
+  const temp = data.list[0].main.temp;
+  console.log(temp);
+
+  const maxTemp = data.list[0].main.temp_max;
+  const minTemp = data.list[0].main.temp_min;
+
+  console.log(maxTemp, minTemp);
+
+  const humidity = data.list[0].main.humidity;
+  console.log(humidity);
+
+  const wind = data.list[0].wind.speed;
+
+  cityNameEl.textContent = `${cityName} - ${country}`;
+  dateEl.textContent = today;
+  iconEl.src = iconUrl;
+  tempEl.textContent = `${temp} ${"\u00B0F"}`;
+  descriptionEL.textContent = `Highs ${maxTemp} & Lows ${minTemp}`;
+  windEl.textContent = `Wind Speed = ${wind} MPH`;
+  humidityEl.textContent = `Humidity = ${humidity} %`;
+}
