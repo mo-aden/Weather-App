@@ -73,6 +73,7 @@ function fetchForcast(lat, lon) {
       // displayWeatherInfo(data);
       displayToday(data);
       // displayWeatherInfo(data);
+      displayRandomCards(data);
     });
 }
 
@@ -202,3 +203,5 @@ function displayToday(data) {
   windEl.textContent = `Wind Speed = ${wind} MPH`;
   humidityEl.textContent = `Humidity = ${humidity} %`;
 }
+
+function displayRandomCards(data) {}
