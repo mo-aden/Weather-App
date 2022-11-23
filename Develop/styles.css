@@ -187,3 +187,26 @@ form #searchBtn:hover {
   grid-template-columns: 1fr 1fr 1fr;
   gap: 3.4rem;
 }
+
+/* RESPONSIVE SITE  */
+@media screen and (max-width: 1400px) {
+  .container {
+    gap: 2.4rem;
+  }
+  .random-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .search-section {
+    width: 100%;
+  }
+  .random-cards {
+    grid-template-columns: 1fr;
+  }
+}
