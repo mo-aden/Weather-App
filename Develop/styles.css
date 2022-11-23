@@ -66,13 +66,21 @@ body {
   background-color: lightblue;
   padding: 2.4rem;
   border-radius: 9px;
-  width: 80%;
+  width: 100%;
 }
 
 .search-section,
 .result-section {
   background-color: #4dabf7;
   box-shadow: 0 0 0 2px #111411;
+}
+
+.search-section {
+  align-self: flex-start;
+}
+
+.random-section .random-cards {
+  flex-direction: column;
 }
 
 form .inputField {
@@ -124,7 +132,7 @@ form #searchBtn:hover {
 /* Result section  */
 
 .card {
-  /* width: 80%; */
+  width: 80%;
   background-color: rgb(14, 15, 15);
   /* padding: 4.8rem; */
   border-radius: 9px;
@@ -158,4 +166,10 @@ form #searchBtn:hover {
 #temp {
   font-size: 3.5rem;
   margin-bottom: 1.2rem;
+}
+
+.random-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.4rem;
 }

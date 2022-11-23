@@ -11,6 +11,7 @@ const descriptionEL = document.querySelector("#description");
 const windEl = document.querySelector("#wind");
 const humidityEl = document.querySelector("#humidity");
 const clearBtnEl = document.querySelector("#clearBtn");
+const randomCardsEl = document.querySelector(".random-cards");
 
 //Get userInputs from local storage
 const searchedCities = JSON.parse(localStorage.getItem("cities")) || [];
@@ -69,9 +70,9 @@ function fetchForcast(lat, lon) {
     .then(function (data) {
       //Display data onto the page
       // console.log(data);
-      console.log(data);
+      // console.log(data);
       // displayWeatherInfo(data);
-      displayToday(data);
+      // displayToday(data);
       // displayWeatherInfo(data);
       displayRandomCards(data);
     });
@@ -146,52 +147,31 @@ clearBtnEl.addEventListener("click", function (e) {
   window.location.reload();
 });
 
-// function displayWeatherInfo(data) {
-//   console.log(data);
-
-//   const timeNow = new Date(data.dt * 1000).toLocaleString();
-
-//   // console.log(timeNow);
-//   // const now = new Date(data.dt * 1000);
-//   // console.log(now.toLocaleString());
-//   cityNameEl.textContent = `${data.name} - ${timeNow}`;
-
-//   tempEl.textContent = `Temperature: ${data.main.temp}`;
-//   windEl.textContent = `Wind: ${data.wind.deg} degrees`;
-//   humidityEl.textContent = `Humidity: ${data.main.humidity}`;
-// }
-
 //Randonly generated cards
 function displayToday(data) {
   const cityName = data.city.name;
-  console.log(cityName);
+  // console.log(cityName);
   const country = data.city.country;
-  console.log(country);
+  // console.log(country);
 
   let dt = new Date(data.list[0].dt_txt);
   const today = dt.toLocaleDateString("en-us", { weekday: "long", year: "numeric", month: "numeric", day: "numeric" });
-  console.log(today);
+  // console.log(today);
 
   // const icon = data.list.weather;
 
   const iconUrl = `https://openweathermap.org/img/wn/${data.list[0].weather[0]["icon"]}.png`;
 
-  const cloudInfo = data.list[0].weather[0]["description"];
-
-  // https://openweathermap.org/img/wn/${data.list[0].weather[0]["description"]};
-
-  console.log(cloudInfo);
-
   const temp = data.list[0].main.temp;
-  console.log(temp);
+  // console.log(temp);
 
   const maxTemp = data.list[0].main.temp_max;
   const minTemp = data.list[0].main.temp_min;
 
-  console.log(maxTemp, minTemp);
+  // console.log(maxTemp, minTemp);
 
   const humidity = data.list[0].main.humidity;
-  console.log(humidity);
+  // console.log(humidity);
 
   const wind = data.list[0].wind.speed;
 
@@ -204,4 +184,43 @@ function displayToday(data) {
   humidityEl.textContent = `Humidity = ${humidity} %`;
 }
 
-function displayRandomCards(data) {}
+function displayRandomCards(data) {
+  // console.log(data);
+
+  //Data not changing
+  const cityName = data.city.name;
+  // console.log(cityName);
+  const country = data.city.country;
+  // console.log(country);
+
+  const dataArr = data.list;
+  // console.log(dataArr);
+
+  for (let i = 1; i < dataArr.length; i += 8) {
+    const el = dataArr[i];
+    console.log(el);
+
+    let dt = new Date(data.list[i].dt_txt);
+    const today = dt.toLocaleDateString("en-us", { weekday: "long", year: "numeric", month: "numeric", day: "numeric" });
+    // console.log(today);
+
+    const iconUrl = `https://openweathermap.org/img/wn/${data.list[i].weather[0]["icon"]}.png`;
+
+    const div = document.createElement("div");
+    div.setAttribute("class", "card");
+
+    div.innerHTML = `   
+          <div class="card-body">
+            <p id="city-name">${cityName} - ${country}</p>
+            <p id="date">${today}</p>
+            <img id="icon" src=${iconUrl} alt="weather Icon" />
+            <p id="temp">${data.list[i].main.temp} ${"\u00B0F"}</p>
+            <p id="description">Highs ${data.list[i].main.temp_max} & Lows ${data.list[i].main.temp_min}</p>
+            <p id="wind">Wind: ${data.list[i].wind.speed}</p>
+            <p id="humidity">Humidity: ${data.list[i].main.humidity} %</p>
+          </div>
+        `;
+
+    randomCardsEl.append(div);
+  }
+}
